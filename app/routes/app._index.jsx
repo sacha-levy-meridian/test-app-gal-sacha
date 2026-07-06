@@ -119,6 +119,7 @@ export const action = async ({ request }) => {
     },
   );
   const metaobjectResponseJson = await metaobjectResponse.json();
+  console.log(metaobjectResponseJson);
 
   return {
     product: responseJson.data.productCreate.product,
