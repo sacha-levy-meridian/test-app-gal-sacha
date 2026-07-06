@@ -25,8 +25,6 @@
   },
   "dependencies": {
     "@prisma/client": "^6.16.3",
-    "@react-router/dev": "^7.12.0",
-    "@react-router/fs-routes": "^7.12.0",
     "@react-router/node": "^7.12.0",
     "@react-router/serve": "^7.12.0",
     "@shopify/app-bridge-react": "^4.2.4",
@@ -37,10 +35,11 @@
     "prisma": "^6.16.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router": "^7.12.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "react-router": "^7.12.0"
   },
   "devDependencies": {
+    "@react-router/dev": "^7.12.0",
+    "@react-router/fs-routes": "^7.12.0",
     "@shopify/api-codegen-preset": "^1.2.0",
     "@shopify/polaris-types": "1.0.1",
     "@types/eslint": "^9.6.1",
@@ -58,7 +57,8 @@
     "graphql-config": "^5.1.1",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
-    "vite": "^6.3.6"
+    "vite": "^6.3.6",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "workspaces": [
     "extensions/*"

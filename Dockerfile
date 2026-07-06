@@ -1,18 +1,29 @@
-FROM node:20-alpine
+FROM node:22-alpine AS builder
 RUN apk add --no-cache openssl
 
-EXPOSE 3000
+WORKDIR /app
+
+COPY package.json package-lock.json* .npmrc ./
+RUN npm ci && npm cache clean --force
+
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runner
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json* .npmrc ./
+RUN npm ci --omit=dev && npm cache clean --force \
+  && rm -rf node_modules/@esbuild node_modules/esbuild \
+  && rm -rf /usr/local/lib/node_modules/npm
 
-RUN npm ci --omit=dev && npm cache clean --force
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/prisma ./prisma
 
-COPY . .
+EXPOSE 3000
 
-RUN npm run build
-
-CMD ["npm", "run", "docker-start"]
+CMD ["sh", "-c", "node_modules/.bin/prisma generate && node_modules/.bin/prisma migrate deploy && node_modules/.bin/react-router-serve ./build/server/index.js"]
