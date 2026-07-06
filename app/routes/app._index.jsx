@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useFetcher } from "react-router";
+import { useFetcher, useOutletContext } from "react-router";
+import { useMeridian } from "@the-meridian/sdk";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
@@ -125,6 +126,63 @@ export const action = async ({ request }) => {
     metaobject: metaobjectResponseJson.data.metaobjectUpsert.metaobject,
   };
 };
+
+function MeridianStatus() {
+  const { hasMeridian } = useOutletContext() ?? {};
+
+  if (!hasMeridian) {
+    return (
+      <s-section slot="aside" heading="Meridian">
+        <s-paragraph>
+          Set <code>MERIDIAN_APP_ID</code> and <code>MERIDIAN_API_KEY</code> in
+          your environment to enable billing and entitlements.
+        </s-paragraph>
+      </s-section>
+    );
+  }
+
+  return <MeridianStatusInner />;
+}
+
+function MeridianStatusInner() {
+  const { loading, error, entitlements, customer } = useMeridian();
+
+  if (loading) {
+    return (
+      <s-section slot="aside" heading="Meridian">
+        <s-paragraph>Loading plan…</s-paragraph>
+      </s-section>
+    );
+  }
+
+  if (error) {
+    return (
+      <s-section slot="aside" heading="Meridian">
+        <s-paragraph>Unable to load billing: {error}</s-paragraph>
+      </s-section>
+    );
+  }
+
+  return (
+    <s-section slot="aside" heading="Meridian">
+      <s-paragraph>
+        <s-text>Plan: </s-text>
+        {entitlements?.planName ?? "No active plan"}
+      </s-paragraph>
+      {customer?.email && (
+        <s-paragraph>
+          <s-text>Billing contact: </s-text>
+          {customer.email}
+        </s-paragraph>
+      )}
+      <s-paragraph>
+        <s-link href="/app/pricing">View plans</s-link>
+        {" · "}
+        <s-link href="/app/account">Manage account</s-link>
+      </s-paragraph>
+    </s-section>
+  );
+}
 
 export default function Index() {
   const fetcher = useFetcher();
@@ -299,6 +357,8 @@ export default function Index() {
           </s-link>
         </s-paragraph>
       </s-section>
+
+      <MeridianStatus />
 
       <s-section slot="aside" heading="Next steps">
         <s-unordered-list>
