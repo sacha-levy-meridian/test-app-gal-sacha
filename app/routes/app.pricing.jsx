@@ -3,11 +3,15 @@ import { MeridianPricingPage } from "@the-meridian/sdk";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 
-export const loader = async ({ request }) => {
-  await authenticate.admin(request);
 
-  const url = new URL(request.url);
-  return { returnUrl: `${url.origin}/app/account` };
+const APP_HANDLE = process.env.SHOPIFY_APP_HANDLE;
+
+export const loader = async ({ request }) => {
+  const { session } = await authenticate.admin(request);
+
+  const apiKey = process.env.SHOPIFY_API_KEY || "";
+  const returnUrl = `https://${session.shop}/admin/apps/${apiKey}/app/pricing`;
+  return { returnUrl };
 };
 
 export default function PricingPage() {
