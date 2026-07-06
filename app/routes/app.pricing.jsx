@@ -3,9 +3,6 @@ import { MeridianPricingPage } from "@the-meridian/sdk";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 
-
-const APP_HANDLE = process.env.SHOPIFY_APP_HANDLE;
-
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
 
