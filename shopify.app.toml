@@ -40,4 +40,4 @@ name = "Description"
 type = "multi_line_text_field"
 
 [auth]
-redirect_urls = ["https://sacha-x-gal-v5.the-meridian.app/api/auth"]
+redirect_urls = ["https://sacha.the-meridian.app/api/auth"]
