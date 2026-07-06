@@ -2,7 +2,7 @@
 
 client_id = "69d601b16c6be23adc25b92808f417f6"
 name = "test-app-gal-sacha"
-application_url = "https://sacha-x-gal-v5.the-meridian.app"
+application_url = "https://sacha.the-meridian.app"
 embedded = true
 
 [build]
